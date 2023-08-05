@@ -1,0 +1,6 @@
+[workspace]
+members = [
+    "app",
+    "util",
+    "linear_regression"
+]
