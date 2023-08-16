@@ -48,7 +48,7 @@ impl DataFrame {
                 Ok(_num_val) => {
                     parsed_col_vec.push(true);
                 }
-                Err(e) => {
+                Err(_e) => {
                     parsed_col_vec.push(false);
                 }
             }
