@@ -13,8 +13,9 @@ fn main() {
             let mut regression =
                 linear_regression::LinearRegression::new(age_data_points, loan_data_points);
 
-            regression.train(100000);
+            regression.train(10_000);
             io::stdin().read_line(&mut input).unwrap();
+            println!("Enter age:");
             let input: f64 = input.trim().parse::<f64>().unwrap();
             let pred_value: f64 = regression.predict(input);
             println!("Predicted Value: {}", pred_value);
