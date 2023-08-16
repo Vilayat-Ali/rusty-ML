@@ -1,13 +1,15 @@
 pub struct LinearRegression<'a> {
     pub x_data_points: &'a Box<[f64]>,
     pub y_data_points: &'a Box<[f64]>,
+    pub m: f64,
+    pub c: f64,
     pub mse: f64,
 }
 
 pub trait LinearRegressionAlgorithm {
     fn gradient_descent(&self, current_m: f64, current_b: f64, learning_rate: f64) -> (f64, f64);
-    fn train(&self);
-    fn predict(&self);
+    fn train(&mut self, epoch: usize);
+    fn predict(&self, input_x: f64) -> f64;
 }
 
 impl<'a> LinearRegressionAlgorithm for LinearRegression<'a> {
@@ -36,9 +38,25 @@ impl<'a> LinearRegressionAlgorithm for LinearRegression<'a> {
         )
     }
 
-    fn train(&self) {}
+    fn train(&mut self, epoch: usize) {
+        let learning_rate: f64 = 0.00001;
 
-    fn predict(&self) {}
+        for x in 1..=epoch {
+            let (new_m, new_c) = self.gradient_descent(self.m, self.c, learning_rate);
+            self.m = new_m;
+            self.c = new_c;
+            println!("------------------------------------");
+            println!("  EPOCH - {}", x);
+            println!("------------------------------------");
+            println!("  Slope (m): {}", self.m);
+            println!("  Slope (c): {}", self.c);
+            println!("------------------------------------");
+        }
+    }
+
+    fn predict(&self, input_x: f64) -> f64 {
+        (self.m * input_x) + self.c
+    }
 }
 
 impl<'a> LinearRegression<'a> {
@@ -47,6 +65,8 @@ impl<'a> LinearRegression<'a> {
             panic!("X and Y data points should be of same size!");
         }
         Self {
+            m: 0_f64,
+            c: 0_f64,
             x_data_points: x,
             y_data_points: y,
             mse: 0.0,
